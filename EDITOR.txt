@@ -1,0 +1,35 @@
+EDITOR :
+
+Objets :
+ - Fichiers
+ - Dossiers ?
+ - Contenu du fichier -> Prévoir une structure complexe ou du moins un moyen que ça soit complexe
+
+Front :
+ - Affichage des objets
+ - Gestion du curseur
+ - Affichage du texte
+ - Entrée clavier
+ - Raccourcis clavier
+ - La tree view
+   - Lien entre les fenêtres
+ - Animations ?
+
+MVP : 
+Editeur dans une fenêtre 3D, sur un fichier
+
+
+Main -> Scene -> Sections -> Files
+
+Main: 
+Create objects for 3d and such (like camera and cursor maybe ?)
+
+Scenes :
+ - Manages everything
+ - Create sections (3D parts, File showing and such)
+ - Set up communications between sections
+ - Call for analyzing folders, or files
+
+Sections : 
+ - File showing (Manage cursor)
+ - Folder Showing
