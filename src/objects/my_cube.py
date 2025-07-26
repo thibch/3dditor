@@ -57,9 +57,9 @@ class Cube():
 
             text_node_path: NodePath = self.mainObject.attachNewNode(text)
             text_node_path.setScale(0.1)
-            pos = Point3(-0.475, -1.5, 0.4 - offset_pos)
+            pos = Point3(-0.475, -1.5, 0.4 - offset_pos*0.075)
             text_node_path.setPos(pos)
-            offset_pos+=0.075 # *(text.get_num_rows() - 1)
+            offset_pos+=1
 
             self.text_node_paths.append(TextObject(text, text_node_path, pos))
 
@@ -100,13 +100,18 @@ class Cube():
             else:
                 self.how_much_scrolled -= 1
 
-            print(self.how_much_scrolled)
+            if self.how_much_scrolled < 0:
+                self.how_much_scrolled = 0
+
+            len_txt_np = len(self.text_node_paths)-1
+            if self.how_much_scrolled > len_txt_np:
+                self.how_much_scrolled = len_txt_np
 
             for text_obj in self.text_node_paths:
                 z = text_obj.get_default_pos().z
                 text_obj.get_text_node_path().set_z(z + (self.how_much_scrolled * 0.075))
-                print(z + (self.how_much_scrolled * 0.074))
-                if text_obj.get_text_node_path().getPos().z > 0.4 or text_obj.get_text_node_path().getPos().z < -0.5:
+                # print(z + (self.how_much_scrolled * 0.074))
+                if text_obj.get_text_node_path().getPos().z > 0.43 or text_obj.get_text_node_path().getPos().z < -0.49:
                     text_obj.get_text_node_path().hide()
                 else:
                     text_obj.get_text_node_path().show()
