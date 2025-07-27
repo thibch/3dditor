@@ -74,12 +74,10 @@ class Game(ShowBase):
                 z_normalized = hit_pos_local.z
                 
                 cube_found = entry.getIntoNode().getName()
-            
-            elif self.queue.getNumEntries() == 0:
-                self.scenes[0].empty_mouse()
-                print("Souris hors du cube!")
 
-            if cube_found:
-                self.scenes[0].found_something(cube_found, x_normalized, z_normalized)
+            self.scenes[0].mouse_on_something(cube_found, x_normalized, z_normalized)
+            #else self.queue.getNumEntries() == 0:
+            #    self.scenes[0].empty_mouse()
+            #    print("Souris hors du cube!")
 
         return task.cont

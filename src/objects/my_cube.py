@@ -4,6 +4,7 @@ from panda3d.core import Point3, CollisionNode, CollisionBox, TextNode, TextFont
 
 from src.backend_editor.text_file import TextFile
 from src.objects.text_object import TextObject
+from src.utils.id_singleton import IdSingleton
 
 
 class Cube():
@@ -12,7 +13,9 @@ class Cube():
     scale_Y = 0.1
     scale_Z = 5
 
-    mouse_on_me = False
+    is_mouse_on_me = False
+    last_mouse_x = 0
+    last_mouse_z = 0
 
     how_much_scrolled = 0
 
@@ -29,15 +32,12 @@ class Cube():
         self.model.reparentTo(self.mainObject)
         self.model.setPos(-0.5, 0, -0.5)
         self.mainObject.setScale(self.scale_X, self.scale_Y, self.scale_Z)
-        # self.mainObject.setPos(0, 0, 4)
         self.model.setColorScale(1, 0, 0, 0)
 
         self.setCollision()
-        self.setText(game.loader)
+        self.set_text(game.loader)
 
-    # TODO: scroll and such
-
-    def setText(self, loader):
+    def set_text(self, loader):
 
         self.txt_infos = TextFile("assets/test_file.txt")
 
@@ -46,7 +46,7 @@ class Cube():
 
         offset_pos = 0
         for line in self.txt_infos.lines:
-            text = TextNode('texte_3d')
+            text = TextNode('texte_3d_' + str(IdSingleton().get_next_id()))
             text.setText(line)
             text.setFont(loader.loadFont('assets/fonts/Monaco.ttf', renderMode = TextFont.RMSolid))
             text.setAlign(TextNode.ABoxedLeft)
@@ -65,7 +65,7 @@ class Cube():
 
             print("------------------")
 
-        
+
     def setCollision(self):
         collision_node = CollisionNode(f'{id(self)}_collider')
 
@@ -82,19 +82,26 @@ class Cube():
         self.collider.show()
         self.collider.setColor(1, 0, 0, 0.3)
 
-    def mouseOnMe(self, mouse_normalized_x, mouse_normalized_z):
+    def mouse_on_me(self, mouse_normalized_x, mouse_normalized_z):
         # print("mousOnMe")
-        self.mouse_on_me = True
-        mult = 15
+        self.last_mouse_x = mouse_normalized_x
+        self.last_mouse_z = mouse_normalized_z
+
+        self.is_mouse_on_me = True
+        mult = 35
+
         self.mainObject.setHpr(-mouse_normalized_x*mult, mouse_normalized_z*mult, 0)
         #   print(f"Position relative sur le cube: x={mouse_normalized_x:.2f}, y={mouse_normalized_z:.2f}")
 
     def no_mouse_on_me(self):
-        self.mouse_on_me = False
+        self.is_mouse_on_me = False
+
+    def click(self):
+        print('clicked here : ', self.last_mouse_x, ',',self.last_mouse_z)
 
     def scroll(self, direction : Literal["up","down"] = "up"):
 
-        if self.mouse_on_me:
+        if self.is_mouse_on_me:
             if direction == "up":
                 self.how_much_scrolled += 1
             else:

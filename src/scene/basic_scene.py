@@ -1,6 +1,5 @@
 from src.objects.my_cube import Cube
-from src.utils.ScrollHandler import ScrollHandler
-
+from src.utils.MouseEventHandler import MouseEventHandler
 
 class BasicScene():
     list_of_cubes = {}
@@ -11,17 +10,16 @@ class BasicScene():
         cube = Cube(game)
         self.list_of_cubes[f"{id(cube)}_collider"] = cube
 
-        self.scrollHandler = ScrollHandler()
+        self.mouse_event_handler = MouseEventHandler()
 
-    def printWheelUp(self):
-        print("printWheelUp")
+    def mouse_on_something(self, name: str, x_normalized, z_normalized):
+        if name:
+            self.mouse_event_handler.cube_to_call(self.list_of_cubes[name])
+            self.list_of_cubes[name].mouse_on_me(x_normalized, z_normalized)
 
-    def printWheelDown(self):
-        print("printWheelDown")
-
-    def found_something(self, name: str, x_normalized, z_normalized):
-        self.scrollHandler.cube_to_call(self.list_of_cubes[name])
-        self.list_of_cubes[name].mouseOnMe(x_normalized, z_normalized)
+        for key, value in self.list_of_cubes.items():
+            if key != name:
+                value.no_mouse_on_me()
 
     def define_tasks(self, taskMgr):
         taskMgr.add(self.run_here, "moveCube")

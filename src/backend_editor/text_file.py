@@ -7,10 +7,10 @@ class TextFile:
         self.lines = []
 
         for line in self.file.readlines():
+            line = line.replace('\n', '')
             if len(line) < 22:
                 self.lines.append(line)
             else:
                 self.lines.extend([line[i:i + 22] for i in range(0, len(line), 22)])
-
 
         print(self.lines)
